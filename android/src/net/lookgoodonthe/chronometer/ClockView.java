@@ -8,10 +8,19 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Calendar;
+
 
 public class ClockView extends View
 {
 	private Drawable clockFace;
+	
+	private Drawable hourHand;
+	private Drawable minuteHand;
+	private Drawable secondHand;
+	
+	private int centerX;
+	private int centerY;
 	
 	public ClockView( Context context, AttributeSet attrs, int defStyle )
 	{
@@ -32,6 +41,25 @@ public class ClockView extends View
 		final Resources res = context.getResources();
 		
 		clockFace = res.getDrawable( R.drawable.face );
+		
+		hourHand   = res.getDrawable( R.drawable.hour   );
+		minuteHand = res.getDrawable( R.drawable.minute );
+		secondHand = res.getDrawable( R.drawable.second );
+	}
+	
+	static void setBoundsOfHand( Drawable hand, float scale, Rect face )
+	{
+		final int handWidth  = Math.round( hand.getIntrinsicWidth () * scale );
+		final int handHeight = Math.round( hand.getIntrinsicHeight() * scale );
+		
+		final int hMargin = (face.width () - handWidth ) / 2;
+		final int vMargin = (face.height() - handHeight) / 2;
+		
+		final Rect bounds = new Rect( face );
+		
+		bounds.inset( hMargin, vMargin );
+		
+		hand.setBounds( bounds );
 	}
 	
 	@Override
@@ -41,6 +69,9 @@ public class ClockView extends View
 		
 		final int width  = MeasureSpec.getSize( widthMeasureSpec  );
 		final int height = MeasureSpec.getSize( heightMeasureSpec );
+		
+		centerX = width  / 2;
+		centerY = height / 2;
 		
 		final int min = Math.min( width, height );
 		final int max = Math.max( width, height );
@@ -62,9 +93,26 @@ public class ClockView extends View
 		final int right  = left + min;
 		final int bottom = top  + min;
 		
+		float scale = (float) min / clockFace.getIntrinsicHeight();
+		
 		final Rect faceBounds = new Rect( left, top, right, bottom );
 		
 		clockFace.setBounds( faceBounds );
+		
+		setBoundsOfHand( hourHand,   scale, faceBounds );
+		setBoundsOfHand( minuteHand, scale, faceBounds );
+		setBoundsOfHand( secondHand, scale, faceBounds );
+	}
+	
+	private void drawHand( Canvas canvas, Drawable hand, float degrees )
+	{
+		canvas.save();
+		
+		canvas.rotate( degrees, centerX, centerY );
+		
+		hand.draw( canvas );
+		
+		canvas.restore();
 	}
 	
 	@Override
@@ -73,6 +121,20 @@ public class ClockView extends View
 		super.onDraw( canvas );
 		
 		clockFace.draw( canvas );
+		
+		final Calendar cal = Calendar.getInstance();
+		
+		final int hour   = cal.get( Calendar.HOUR   );
+		final int minute = cal.get( Calendar.MINUTE );
+		final int second = cal.get( Calendar.SECOND );
+		
+		final float seconds = second;
+		final float minutes = minute + seconds / 60;
+		final float hours   = hour   + minutes / 60;
+		
+		drawHand( canvas, hourHand,   hours   * 30 );  // 360 / 12
+		drawHand( canvas, minuteHand, minutes *  6 );  // 360 / 60
+		drawHand( canvas, secondHand, seconds *  6 );  // 360 / 60
 	}
 }
 
