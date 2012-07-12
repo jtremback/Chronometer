@@ -5,9 +5,9 @@
 	android:layout_height="fill_parent"
 	android:gravity="center"
 	>
-	<ImageView
+	<view class="net.lookgoodonthe.chronometer.ClockView"
+		android:id="@+id/clock"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:src="@drawable/face"
 		/>
 </LinearLayout>
