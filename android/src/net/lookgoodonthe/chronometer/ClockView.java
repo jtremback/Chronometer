@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -21,6 +22,24 @@ public class ClockView extends View
 	
 	private int centerX;
 	private int centerY;
+	
+	private Handler updateHandler = new Handler();
+	
+	private Runnable update = new Runnable()
+	{
+		public void run()
+		{
+			ClockView.this.invalidate();
+			
+			final long ms = System.currentTimeMillis();
+			
+			final long remainder = ms % 1000;
+			
+			final long gap = 1000 - remainder;
+			
+			updateHandler.postDelayed( this, gap );
+		}
+	};
 	
 	public ClockView( Context context, AttributeSet attrs, int defStyle )
 	{
@@ -45,6 +64,8 @@ public class ClockView extends View
 		hourHand   = res.getDrawable( R.drawable.hour   );
 		minuteHand = res.getDrawable( R.drawable.minute );
 		secondHand = res.getDrawable( R.drawable.second );
+		
+		updateHandler.post( update );
 	}
 	
 	static void setBoundsOfHand( Drawable hand, float scale, Rect face )
