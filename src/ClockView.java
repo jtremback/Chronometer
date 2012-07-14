@@ -20,6 +20,9 @@ public class ClockView extends View
 	private Drawable minuteHand;
 	private Drawable secondHand;
 	
+	private Drawable alarmHandle;
+	private Drawable timerHandle;
+	
 	private int centerX;
 	private int centerY;
 	
@@ -64,6 +67,9 @@ public class ClockView extends View
 		hourHand   = res.getDrawable( R.drawable.hour   );
 		minuteHand = res.getDrawable( R.drawable.minute );
 		secondHand = res.getDrawable( R.drawable.second );
+		
+		alarmHandle = res.getDrawable( R.drawable.alarm );
+		timerHandle = res.getDrawable( R.drawable.timer );
 		
 		updateHandler.post( update );
 	}
@@ -123,6 +129,9 @@ public class ClockView extends View
 		setBoundsOfHand( hourHand,   scale, faceBounds );
 		setBoundsOfHand( minuteHand, scale, faceBounds );
 		setBoundsOfHand( secondHand, scale, faceBounds );
+		
+		setBoundsOfHand( alarmHandle, scale, faceBounds );
+		setBoundsOfHand( timerHandle, scale, faceBounds );
 	}
 	
 	private void drawHand( Canvas canvas, Drawable hand, float degrees )
@@ -153,9 +162,11 @@ public class ClockView extends View
 		final float minutes = minute + seconds / 60;
 		final float hours   = hour   + minutes / 60;
 		
-		drawHand( canvas, hourHand,   hours   * 30 );  // 360 / 12
-		drawHand( canvas, minuteHand, minutes *  6 );  // 360 / 60
-		drawHand( canvas, secondHand, seconds *  6 );  // 360 / 60
+		drawHand( canvas, hourHand,    hours   * 30 );  // 360 / 12
+		drawHand( canvas, alarmHandle, hours   * 30 );  // 360 / 12
+		drawHand( canvas, minuteHand,  minutes *  6 );  // 360 / 60
+		drawHand( canvas, timerHandle, minutes *  6 );  // 360 / 60
+		drawHand( canvas, secondHand,  seconds *  6 );  // 360 / 60
 	}
 }
 
