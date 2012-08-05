@@ -26,6 +26,8 @@ public class ClockView extends View
 	private int centerX;
 	private int centerY;
 	
+	private float scale;
+	
 	private Handler updateHandler = new Handler();
 	
 	private Runnable update = new Runnable()
@@ -120,7 +122,7 @@ public class ClockView extends View
 		final int right  = left + min;
 		final int bottom = top  + min;
 		
-		float scale = (float) min / clockFace.getIntrinsicHeight();
+		scale = (float) min / clockFace.getIntrinsicHeight();
 		
 		final Rect faceBounds = new Rect( left, top, right, bottom );
 		
