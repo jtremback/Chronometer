@@ -20,6 +20,9 @@ public class ClockView extends View
 	final int ALARM_HANDLE = 1;
 	final int TIMER_HANDLE = 2;
 	
+	private long alarmTime = 0;
+	private long timerTime = 0;
+	
 	private Drawable clockFace;
 	
 	private Drawable hourHand;
@@ -41,6 +44,8 @@ public class ClockView extends View
 	private float timerAngle;
 	
 	private int dragging = NOTHING;
+	
+	private long timeOfDrag;
 	
 	private double initialDragAngle;
 	private double lastDragAngle;
@@ -192,8 +197,23 @@ public class ClockView extends View
 		
 		final float dragAngle = (float) lastDragAngle;
 		
-		alarmAngle = dragging == ALARM_HANDLE  &&  crossings >= 0 ? dragAngle : hourAngle;
-		timerAngle = dragging == TIMER_HANDLE  &&  crossings >= 0 ? dragAngle : minuteAngle;
+		if ( dragging == ALARM_HANDLE )
+		{
+			alarmAngle = crossings >= 0 ? dragAngle : hourAngle;
+		}
+		else if ( alarmTime == 0 )
+		{
+			alarmAngle = hourAngle;
+		}
+		
+		if ( dragging == TIMER_HANDLE )
+		{
+			timerAngle = crossings >= 0 ? dragAngle : minuteAngle;
+		}
+		else if ( timerTime == 0 )
+		{
+			timerAngle = minuteAngle;
+		}
 		
 		drawHand( canvas, hourHand,    hourAngle   );
 		drawHand( canvas, alarmHandle, alarmAngle  );
@@ -231,11 +251,36 @@ public class ClockView extends View
 		return true;
 	}
 	
+	private int msPerCircle()
+	{
+		final int msPerHour = 1000 * 60 * 60;
+		
+		final int msPerAlarmCircle = msPerHour * 12;
+		final int msPerTimerCircle = msPerHour;
+		
+		return dragging == ALARM_HANDLE ? msPerAlarmCircle : msPerTimerCircle;
+	}
+	
 	private void beginDrag()
 	{
 		initialDragAngle = dragging == ALARM_HANDLE ? alarmAngle : timerAngle;
 		
 		crossings = 0;
+		
+		timeOfDrag = System.currentTimeMillis();
+		
+		final long eventTime = dragging == ALARM_HANDLE ? alarmTime : timerTime;
+		
+		if ( eventTime != 0 )
+		{
+			final double timeOffset = eventTime - timeOfDrag;
+			
+			final double angleOffset = timeOffset / msPerCircle() * 360;
+			
+			crossings = (int) angleOffset / 360;
+			
+			initialDragAngle = (initialDragAngle - angleOffset + 360) % 360;
+		}
 		
 		lastDragAngle = initialDragAngle;
 	}
@@ -255,6 +300,29 @@ public class ClockView extends View
 		lastDragAngle = angle;
 		
 		invalidate();
+	}
+	
+	private void endDrag()
+	{
+		final double angleDragged = Trig.unsignedAngularDistance( initialDragAngle, lastDragAngle ) + crossings * 360;
+		
+		final double msDragged = angleDragged / 360 * msPerCircle();
+		
+		long eventTime = timeOfDrag + (long) msDragged;
+		
+		if ( eventTime <= System.currentTimeMillis() )
+		{
+			eventTime = 0;
+		}
+		
+		if ( dragging == ALARM_HANDLE )
+		{
+			alarmTime = eventTime;
+		}
+		else
+		{
+			timerTime = eventTime;
+		}
 	}
 	
 	@Override
@@ -308,6 +376,8 @@ public class ClockView extends View
 			
 			if ( action == MotionEvent.ACTION_UP )
 			{
+				endDrag();
+				
 				dragging = NOTHING;
 			}
 		}
