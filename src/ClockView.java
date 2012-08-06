@@ -28,6 +28,9 @@ public class ClockView extends View
 	
 	private float scale;
 	
+	private float alarmAngle;
+	private float timerAngle;
+	
 	private Handler updateHandler = new Handler();
 	
 	private Runnable update = new Runnable()
@@ -168,10 +171,13 @@ public class ClockView extends View
 		final float minuteAngle = minutes *  6;  // 360 / 60
 		final float secondAngle = seconds *  6;  // 360 / 60
 		
+		alarmAngle = hourAngle;
+		timerAngle = minuteAngle;
+		
 		drawHand( canvas, hourHand,    hourAngle   );
-		drawHand( canvas, alarmHandle, hourAngle   );
+		drawHand( canvas, alarmHandle, alarmAngle  );
 		drawHand( canvas, minuteHand,  minuteAngle );
-		drawHand( canvas, timerHandle, minuteAngle );
+		drawHand( canvas, timerHandle, timerAngle  );
 		drawHand( canvas, secondHand,  secondAngle );
 	}
 }
