@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -207,6 +208,13 @@ public class ClockView extends View
 	
 	private boolean hitFeedback()
 	{
+		//final String vibrator_service = VIBRATOR_SERVICE;
+		final String vibrator_service = "vibrator";
+
+		Vibrator vibrator = (Vibrator) getContext().getSystemService( vibrator_service );
+		
+		vibrator.vibrate( 8 );
+		
 		return true;
 	}
 	
