@@ -34,8 +34,18 @@ public class ClockView extends View
 	
 	private float scale;
 	
+	private float hourAngle;
+	private float minuteAngle;
+	
 	private float alarmAngle;
 	private float timerAngle;
+	
+	private int dragging = NOTHING;
+	
+	private double initialDragAngle;
+	private double lastDragAngle;
+	
+	private int crossings;
 	
 	private Handler updateHandler = new Handler();
 	
@@ -175,12 +185,15 @@ public class ClockView extends View
 		final float minutes = minute + seconds / 60;
 		final float hours   = hour   + minutes / 60;
 		
-		final float hourAngle   = hours   * 30;  // 360 / 12
-		final float minuteAngle = minutes *  6;  // 360 / 60
+		hourAngle   = hours   * 30;  // 360 / 12
+		minuteAngle = minutes *  6;  // 360 / 60
+		
 		final float secondAngle = seconds *  6;  // 360 / 60
 		
-		alarmAngle = hourAngle;
-		timerAngle = minuteAngle;
+		final float dragAngle = (float) lastDragAngle;
+		
+		alarmAngle = dragging == ALARM_HANDLE  &&  crossings >= 0 ? dragAngle : hourAngle;
+		timerAngle = dragging == TIMER_HANDLE  &&  crossings >= 0 ? dragAngle : minuteAngle;
 		
 		drawHand( canvas, hourHand,    hourAngle   );
 		drawHand( canvas, alarmHandle, alarmAngle  );
@@ -218,6 +231,32 @@ public class ClockView extends View
 		return true;
 	}
 	
+	private void beginDrag()
+	{
+		initialDragAngle = dragging == ALARM_HANDLE ? alarmAngle : timerAngle;
+		
+		crossings = 0;
+		
+		lastDragAngle = initialDragAngle;
+	}
+	
+	private void updateDrag( double angle )
+	{
+		final double a = Trig.signedAngularDistance( initialDragAngle, lastDragAngle );
+		final double b = Trig.signedAngularDistance( initialDragAngle, angle         );
+		
+		final double c = Trig.signedAngularDistance( angle, lastDragAngle );
+		
+		if ( Math.abs( b ) < 90  &&  (a < 0) != (b < 0) )
+		{
+			crossings += a < b ? 1 : -1;
+		}
+		
+		lastDragAngle = angle;
+		
+		invalidate();
+	}
+	
 	@Override
 	public boolean onTouchEvent( MotionEvent event )
 	{
@@ -227,6 +266,15 @@ public class ClockView extends View
 		{
 			case MotionEvent.ACTION_DOWN:
 				break;
+			
+			case MotionEvent.ACTION_MOVE:
+			case MotionEvent.ACTION_UP:
+				if ( dragging != NOTHING )
+				{
+					break;
+				}
+				
+				// fall through
 			
 			default:
 				return super.onTouchEvent( event );
@@ -241,7 +289,27 @@ public class ClockView extends View
 		
 		if ( action == MotionEvent.ACTION_DOWN )
 		{
-			return hitTest( r, angle ) != NOTHING  &&  hitFeedback();
+			final int hit = hitTest( r, angle );
+			
+			if ( hit == NOTHING )
+			{
+				return false;
+			}
+			
+			dragging = hit;
+			
+			beginDrag();
+			
+			return hitFeedback();
+		}
+		else  // MOVE or UP
+		{
+			updateDrag( angle );
+			
+			if ( action == MotionEvent.ACTION_UP )
+			{
+				dragging = NOTHING;
+			}
 		}
 		
 		return true;
