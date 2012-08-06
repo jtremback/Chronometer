@@ -40,6 +40,8 @@ public class ClockView extends View
 	private float alarmAngle;
 	private float timerAngle;
 	
+	private int dragging = NOTHING;
+	
 	private Handler updateHandler = new Handler();
 	
 	private Runnable update = new Runnable()
@@ -232,6 +234,15 @@ public class ClockView extends View
 			case MotionEvent.ACTION_DOWN:
 				break;
 			
+			case MotionEvent.ACTION_MOVE:
+			case MotionEvent.ACTION_UP:
+				if ( dragging != NOTHING )
+				{
+					break;
+				}
+				
+				// fall through
+			
 			default:
 				return super.onTouchEvent( event );
 		}
@@ -252,7 +263,16 @@ public class ClockView extends View
 				return false;
 			}
 			
+			dragging = hit;
+			
 			return hitFeedback();
+		}
+		else  // MOVE or UP
+		{
+			if ( action == MotionEvent.ACTION_UP )
+			{
+				dragging = NOTHING;
+			}
 		}
 		
 		return true;
