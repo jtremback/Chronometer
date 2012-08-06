@@ -27,11 +27,19 @@ public final class Trig
 		return angle;
 	}
 	
+	static public double unsignedAngularDistance( double a, double b )
+	{
+		return (b - a + 360) % 360;
+	}
+	
+	static public double signedAngularDistance( double a, double b )
+	{
+		return (b - a + 180 + 360) % 360 - 180;
+	}
+	
 	static public boolean matchingAngles( double a, double b, double range )
 	{
-		final double delta = Math.abs( a - b );
-		
-		return delta < range  ||  360 - delta < range;
+		return Math.abs( signedAngularDistance( a, b ) ) < range;
 	}
 	
 }
