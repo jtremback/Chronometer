@@ -164,11 +164,15 @@ public class ClockView extends View
 		final float minutes = minute + seconds / 60;
 		final float hours   = hour   + minutes / 60;
 		
-		drawHand( canvas, hourHand,    hours   * 30 );  // 360 / 12
-		drawHand( canvas, alarmHandle, hours   * 30 );  // 360 / 12
-		drawHand( canvas, minuteHand,  minutes *  6 );  // 360 / 60
-		drawHand( canvas, timerHandle, minutes *  6 );  // 360 / 60
-		drawHand( canvas, secondHand,  seconds *  6 );  // 360 / 60
+		final float hourAngle   = hours   * 30;  // 360 / 12
+		final float minuteAngle = minutes *  6;  // 360 / 60
+		final float secondAngle = seconds *  6;  // 360 / 60
+		
+		drawHand( canvas, hourHand,    hourAngle   );
+		drawHand( canvas, alarmHandle, hourAngle   );
+		drawHand( canvas, minuteHand,  minuteAngle );
+		drawHand( canvas, timerHandle, minuteAngle );
+		drawHand( canvas, secondHand,  secondAngle );
 	}
 }
 
