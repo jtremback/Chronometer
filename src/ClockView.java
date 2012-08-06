@@ -245,7 +245,14 @@ public class ClockView extends View
 		
 		if ( action == MotionEvent.ACTION_DOWN )
 		{
-			return hitTest( r, angle ) != NOTHING  &&  hitFeedback();
+			final int hit = hitTest( r, angle );
+			
+			if ( hit == NOTHING )
+			{
+				return false;
+			}
+			
+			return hitFeedback();
 		}
 		
 		return true;
