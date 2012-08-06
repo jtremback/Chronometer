@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.Calendar;
@@ -14,6 +16,10 @@ import java.util.Calendar;
 
 public class ClockView extends View
 {
+	final int NOTHING      = 0;
+	final int ALARM_HANDLE = 1;
+	final int TIMER_HANDLE = 2;
+	
 	private Drawable clockFace;
 	
 	private Drawable hourHand;
@@ -25,6 +31,11 @@ public class ClockView extends View
 	
 	private int centerX;
 	private int centerY;
+	
+	private float scale;
+	
+	private float alarmAngle;
+	private float timerAngle;
 	
 	private Handler updateHandler = new Handler();
 	
@@ -72,6 +83,8 @@ public class ClockView extends View
 		timerHandle = res.getDrawable( R.drawable.timer );
 		
 		updateHandler.post( update );
+		
+		setClickable( true );
 	}
 	
 	static void setBoundsOfHand( Drawable hand, float scale, Rect face )
@@ -120,7 +133,7 @@ public class ClockView extends View
 		final int right  = left + min;
 		final int bottom = top  + min;
 		
-		float scale = (float) min / clockFace.getIntrinsicHeight();
+		scale = (float) min / clockFace.getIntrinsicHeight();
 		
 		final Rect faceBounds = new Rect( left, top, right, bottom );
 		
@@ -162,11 +175,76 @@ public class ClockView extends View
 		final float minutes = minute + seconds / 60;
 		final float hours   = hour   + minutes / 60;
 		
-		drawHand( canvas, hourHand,    hours   * 30 );  // 360 / 12
-		drawHand( canvas, alarmHandle, hours   * 30 );  // 360 / 12
-		drawHand( canvas, minuteHand,  minutes *  6 );  // 360 / 60
-		drawHand( canvas, timerHandle, minutes *  6 );  // 360 / 60
-		drawHand( canvas, secondHand,  seconds *  6 );  // 360 / 60
+		final float hourAngle   = hours   * 30;  // 360 / 12
+		final float minuteAngle = minutes *  6;  // 360 / 60
+		final float secondAngle = seconds *  6;  // 360 / 60
+		
+		alarmAngle = hourAngle;
+		timerAngle = minuteAngle;
+		
+		drawHand( canvas, hourHand,    hourAngle   );
+		drawHand( canvas, alarmHandle, alarmAngle  );
+		drawHand( canvas, minuteHand,  minuteAngle );
+		drawHand( canvas, timerHandle, timerAngle  );
+		drawHand( canvas, secondHand,  secondAngle );
+	}
+	
+	private int hitTest( double r, double angle )
+	{
+		r /= scale;
+		
+		if ( r > 150  &&  r < 250  &&  Trig.matchingAngles( angle, timerAngle, 10 ) )
+		{
+			return TIMER_HANDLE;
+		}
+		
+		if ( r > 90  &&  r < 170  &&  Trig.matchingAngles( angle, alarmAngle, 20 ) )
+		{
+			return ALARM_HANDLE;
+		}
+		
+		return NOTHING;
+	}
+	
+	private boolean hitFeedback()
+	{
+		//final String vibrator_service = VIBRATOR_SERVICE;
+		final String vibrator_service = "vibrator";
+
+		Vibrator vibrator = (Vibrator) getContext().getSystemService( vibrator_service );
+		
+		vibrator.vibrate( 8 );
+		
+		return true;
+	}
+	
+	@Override
+	public boolean onTouchEvent( MotionEvent event )
+	{
+		final int action = event.getActionMasked();
+		
+		switch ( action )
+		{
+			case MotionEvent.ACTION_DOWN:
+				break;
+			
+			default:
+				return super.onTouchEvent( event );
+		}
+		
+		final float x = event.getX() - centerX;
+		final float y = event.getY() - centerY;
+		
+		final double r = Math.sqrt( x * x + y * y );
+		
+		final double angle = Trig.angleFromXY( x, y );
+		
+		if ( action == MotionEvent.ACTION_DOWN )
+		{
+			return hitTest( r, angle ) != NOTHING  &&  hitFeedback();
+		}
+		
+		return true;
 	}
 }
 
