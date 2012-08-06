@@ -34,6 +34,9 @@ public class ClockView extends View
 	
 	private float scale;
 	
+	private float hourAngle;
+	private float minuteAngle;
+	
 	private float alarmAngle;
 	private float timerAngle;
 	
@@ -175,8 +178,9 @@ public class ClockView extends View
 		final float minutes = minute + seconds / 60;
 		final float hours   = hour   + minutes / 60;
 		
-		final float hourAngle   = hours   * 30;  // 360 / 12
-		final float minuteAngle = minutes *  6;  // 360 / 60
+		hourAngle   = hours   * 30;  // 360 / 12
+		minuteAngle = minutes *  6;  // 360 / 60
+		
 		final float secondAngle = seconds *  6;  // 360 / 60
 		
 		alarmAngle = hourAngle;
