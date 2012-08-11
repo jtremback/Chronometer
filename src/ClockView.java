@@ -195,22 +195,12 @@ public class ClockView extends View
 		
 		final float secondAngle = seconds *  6;  // 360 / 60
 		
-		final float dragAngle = (float) lastDragAngle;
-		
-		if ( dragging == ALARM_HANDLE )
-		{
-			alarmAngle = crossings >= 0 ? dragAngle : hourAngle;
-		}
-		else if ( alarmTime == 0 )
+		if ( dragging != ALARM_HANDLE  &&  alarmTime == 0 )
 		{
 			alarmAngle = hourAngle;
 		}
 		
-		if ( dragging == TIMER_HANDLE )
-		{
-			timerAngle = crossings >= 0 ? dragAngle : minuteAngle;
-		}
-		else if ( timerTime == 0 )
+		if ( dragging != TIMER_HANDLE  &&  timerTime == 0 )
 		{
 			timerAngle = minuteAngle;
 		}
@@ -297,6 +287,17 @@ public class ClockView extends View
 		if ( Math.abs( b ) < 90  &&  (a < 0) != (b < 0) )
 		{
 			crossings += a < b ? 1 : -1;
+		}
+		
+		final boolean validDrag = crossings >= 0;
+		
+		if ( dragging == ALARM_HANDLE )
+		{
+			alarmAngle = validDrag ? (float) angle : hourAngle;
+		}
+		else
+		{
+			timerAngle = validDrag ? (float) angle : minuteAngle;
 		}
 		
 		lastDragAngle = angle;
