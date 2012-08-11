@@ -47,7 +47,7 @@ public class ClockView extends View
 	
 	private long timeOfDrag;
 	
-	private double initialDragAngle;
+	private double baseDragAngle;
 	private double lastDragAngle;
 	
 	private int crossings;
@@ -263,7 +263,9 @@ public class ClockView extends View
 	
 	private void beginDrag()
 	{
-		initialDragAngle = dragging == ALARM_HANDLE ? alarmAngle : timerAngle;
+		final double initialDragAngle = dragging == ALARM_HANDLE ? alarmAngle : timerAngle;
+		
+		baseDragAngle = initialDragAngle;
 		
 		crossings = 0;
 		
@@ -279,16 +281,16 @@ public class ClockView extends View
 			
 			crossings = (int) angleOffset / 360;
 			
-			initialDragAngle = (initialDragAngle - angleOffset + 360) % 360;
+			baseDragAngle = (initialDragAngle - angleOffset + 360) % 360;
 		}
 		
-		lastDragAngle = initialDragAngle;
+		lastDragAngle = baseDragAngle;
 	}
 	
 	private void updateDrag( double angle )
 	{
-		final double a = Trig.signedAngularDistance( initialDragAngle, lastDragAngle );
-		final double b = Trig.signedAngularDistance( initialDragAngle, angle         );
+		final double a = Trig.signedAngularDistance( baseDragAngle, lastDragAngle );
+		final double b = Trig.signedAngularDistance( baseDragAngle, angle         );
 		
 		final double c = Trig.signedAngularDistance( angle, lastDragAngle );
 		
@@ -304,7 +306,7 @@ public class ClockView extends View
 	
 	private void endDrag()
 	{
-		final double angleDragged = Trig.unsignedAngularDistance( initialDragAngle, lastDragAngle ) + crossings * 360;
+		final double angleDragged = Trig.unsignedAngularDistance( baseDragAngle, lastDragAngle ) + crossings * 360;
 		
 		final double msDragged = angleDragged / 360 * msPerCircle();
 		
