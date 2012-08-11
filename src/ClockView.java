@@ -284,7 +284,7 @@ public class ClockView extends View
 			baseDragAngle = (initialDragAngle - angleOffset + 360) % 360;
 		}
 		
-		lastDragAngle = baseDragAngle;
+		lastDragAngle = initialDragAngle;
 	}
 	
 	private void updateDrag( double angle )
