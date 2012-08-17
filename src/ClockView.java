@@ -205,10 +205,10 @@ public class ClockView extends View
 			timerAngle = minuteAngle;
 		}
 		
-		drawHand( canvas, hourHand,    hourAngle   );
 		drawHand( canvas, alarmHandle, alarmAngle  );
-		drawHand( canvas, minuteHand,  minuteAngle );
 		drawHand( canvas, timerHandle, timerAngle  );
+		drawHand( canvas, hourHand,    hourAngle   );
+		drawHand( canvas, minuteHand,  minuteAngle );
 		drawHand( canvas, secondHand,  secondAngle );
 	}
 	
