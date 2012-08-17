@@ -1,4 +1,4 @@
-package net.lookgoodonthe.chronometer;
+package com.metamage.chronometer;
 
 public final class Trig
 {

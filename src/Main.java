@@ -1,4 +1,4 @@
-package net.lookgoodonthe.chronometer;
+package com.metamage.chronometer;
 
 import android.app.Activity;
 import android.os.Bundle;
