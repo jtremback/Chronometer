@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
-public final class Main extends Activity
+public final class Chronometer extends Activity
 {
 	
 	@Override
