@@ -19,9 +19,6 @@ public class ClockView extends View
 	final int ALARM_HANDLE = 1;
 	final int TIMER_HANDLE = 2;
 	
-	private long alarmTime = 0;
-	private long timerTime = 0;
-	
 	private Drawable clockFace;
 	private Drawable clockCenter;
 	
@@ -51,6 +48,8 @@ public class ClockView extends View
 	private double lastDragAngle;
 	
 	private int crossings;
+	
+	private final Chronometer chronometer = (Chronometer) getContext();
 	
 	public ClockView( Context context, AttributeSet attrs, int defStyle )
 	{
@@ -166,12 +165,12 @@ public class ClockView extends View
 		
 		final float secondAngle = seconds *  6;  // 360 / 60
 		
-		if ( dragging != ALARM_HANDLE  &&  alarmTime == 0 )
+		if ( dragging != ALARM_HANDLE  &&  chronometer.getAlarmTime() == 0 )
 		{
 			alarmAngle = hourAngle;
 		}
 		
-		if ( dragging != TIMER_HANDLE  &&  timerTime == 0 )
+		if ( dragging != TIMER_HANDLE  &&  chronometer.getTimerTime() == 0 )
 		{
 			timerAngle = minuteAngle;
 		}
@@ -234,7 +233,8 @@ public class ClockView extends View
 		
 		timeOfDrag = System.currentTimeMillis();
 		
-		final long eventTime = dragging == ALARM_HANDLE ? alarmTime : timerTime;
+		final long eventTime = dragging == ALARM_HANDLE ? chronometer.getAlarmTime()
+		                                                : chronometer.getTimerTime();
 		
 		if ( eventTime != 0 )
 		{
@@ -293,11 +293,11 @@ public class ClockView extends View
 		
 		if ( dragging == ALARM_HANDLE )
 		{
-			alarmTime = eventTime;
+			chronometer.setAlarmTime( eventTime );
 		}
 		else
 		{
-			timerTime = eventTime;
+			chronometer.setTimerTime( eventTime );
 		}
 	}
 	

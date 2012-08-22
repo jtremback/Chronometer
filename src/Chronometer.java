@@ -9,6 +9,9 @@ import android.view.View;
 public final class Chronometer extends Activity
 {
 	
+	private long alarmTime = 0;
+	private long timerTime = 0;
+	
 	private View clockView;
 	
 	private Handler updateHandler = new Handler();
@@ -28,6 +31,26 @@ public final class Chronometer extends Activity
 			updateHandler.postDelayed( this, gap );
 		}
 	};
+
+	long getAlarmTime()
+	{
+		return alarmTime;
+	}
+	
+	long getTimerTime()
+	{
+		return timerTime;
+	}
+	
+	public void setAlarmTime( long ms )
+	{
+		alarmTime = ms;
+	}
+	
+	public void setTimerTime( long ms )
+	{
+		timerTime = ms;
+	}
 	
 	@Override
 	public void onCreate( Bundle savedInstanceState )
