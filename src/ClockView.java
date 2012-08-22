@@ -320,15 +320,21 @@ public class ClockView extends View
 		
 		lastDragAngle = angle;
 		
+		final long eventTime = eventTimeFromDrag();
+		
 		final boolean validDrag = crossings >= 0;
 		
 		if ( dragging == ALARM_HANDLE )
 		{
 			alarmAngle = validDrag ? (float) angle : hourAngle;
+			
+			chronometer.setAlarmTime( eventTime );
 		}
 		else
 		{
 			timerAngle = validDrag ? (float) angle : minuteAngle;
+			
+			chronometer.setTimerTime( eventTime );
 		}
 		
 		invalidate();
@@ -336,16 +342,6 @@ public class ClockView extends View
 	
 	private void endDrag()
 	{
-		long eventTime = eventTimeFromDrag();
-		
-		if ( dragging == ALARM_HANDLE )
-		{
-			chronometer.setAlarmTime( eventTime );
-		}
-		else
-		{
-			chronometer.setTimerTime( eventTime );
-		}
 	}
 	
 	@Override
