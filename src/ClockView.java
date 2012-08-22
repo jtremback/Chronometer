@@ -24,6 +24,7 @@ public class ClockView extends View
 	private long timerTime = 0;
 	
 	private Drawable clockFace;
+	private Drawable clockCenter;
 	
 	private Drawable hourHand;
 	private Drawable minuteHand;
@@ -88,7 +89,8 @@ public class ClockView extends View
 	{
 		final Resources res = context.getResources();
 		
-		clockFace = res.getDrawable( R.drawable.face );
+		clockFace   = res.getDrawable( R.drawable.face   );
+		clockCenter = res.getDrawable( R.drawable.center );
 		
 		hourHand   = res.getDrawable( R.drawable.hour   );
 		minuteHand = res.getDrawable( R.drawable.minute );
@@ -160,6 +162,8 @@ public class ClockView extends View
 		
 		setBoundsOfHand( alarmHandle, scale, faceBounds );
 		setBoundsOfHand( timerHandle, scale, faceBounds );
+		
+		setBoundsOfHand( clockCenter, scale, faceBounds );
 	}
 	
 	private void drawHand( Canvas canvas, Drawable hand, float degrees )
@@ -210,6 +214,8 @@ public class ClockView extends View
 		drawHand( canvas, hourHand,    hourAngle   );
 		drawHand( canvas, minuteHand,  minuteAngle );
 		drawHand( canvas, secondHand,  secondAngle );
+		
+		clockCenter.draw( canvas );
 	}
 	
 	private int hitTest( double r, double angle )
