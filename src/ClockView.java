@@ -318,6 +318,8 @@ public class ClockView extends View
 			crossings += a < b ? 1 : -1;
 		}
 		
+		lastDragAngle = angle;
+		
 		final boolean validDrag = crossings >= 0;
 		
 		if ( dragging == ALARM_HANDLE )
@@ -328,8 +330,6 @@ public class ClockView extends View
 		{
 			timerAngle = validDrag ? (float) angle : minuteAngle;
 		}
-		
-		lastDragAngle = angle;
 		
 		invalidate();
 	}
