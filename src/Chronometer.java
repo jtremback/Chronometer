@@ -117,9 +117,16 @@ public final class Chronometer extends Activity
 		{
 			long delta = timerTime - System.currentTimeMillis();
 			
-			int minutes = (int) (delta / 1000 / 60);
+			final int minutes = (int) (delta / 1000 / 60);
 			
-			text = Integer.toString( minutes ) + " min";
+			if ( minutes > 0 )
+			{
+				text = Integer.toString( minutes ) + " min";
+			}
+			else
+			{
+				text = Integer.toString( (int) (delta / 1000) ) + " sec";
+			}
 		}
 		
 		timerText.setText( text );
