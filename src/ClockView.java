@@ -122,31 +122,19 @@ public class ClockView extends View
 	@Override
 	protected void onMeasure( int widthMeasureSpec, int heightMeasureSpec )
 	{
-		super.onMeasure( widthMeasureSpec, heightMeasureSpec );
-		
 		final int width  = MeasureSpec.getSize( widthMeasureSpec  );
 		final int height = MeasureSpec.getSize( heightMeasureSpec );
 		
-		centerX = width  / 2;
-		centerY = height / 2;
-		
 		final int min = Math.min( width, height );
-		final int max = Math.max( width, height );
 		
-		final int margin = (max - min) / 2;
+		centerX = min / 2;
+		centerY = min / 2;
+		
+		setMeasuredDimension( min, min );
 		
 		int top  = 0;
 		int left = 0;
 
-		if ( width < height )
-		{
-			top += margin;  // portrait mode
-		}
-		else
-		{
-			left += margin;  // landscape mode
-		}
-		
 		final int right  = left + min;
 		final int bottom = top  + min;
 		
