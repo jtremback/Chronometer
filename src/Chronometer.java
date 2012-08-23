@@ -29,6 +29,16 @@ public final class Chronometer extends Activity
 			final long gap = 1000 - remainder;
 			
 			updateHandler.postDelayed( this, gap );
+			
+			if ( alarmTime != 0  &&  ms >= alarmTime )
+			{
+				setAlarmTime( 0 );
+			}
+			
+			if ( timerTime != 0  &&  ms >= timerTime )
+			{
+				setTimerTime( 0 );
+			}
 		}
 	};
 
