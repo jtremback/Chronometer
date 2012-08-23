@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -53,24 +52,6 @@ public class ClockView extends View
 	
 	private int crossings;
 	
-	private Handler updateHandler = new Handler();
-	
-	private Runnable update = new Runnable()
-	{
-		public void run()
-		{
-			ClockView.this.invalidate();
-			
-			final long ms = System.currentTimeMillis();
-			
-			final long remainder = ms % 1000;
-			
-			final long gap = 1000 - remainder;
-			
-			updateHandler.postDelayed( this, gap );
-		}
-	};
-	
 	public ClockView( Context context, AttributeSet attrs, int defStyle )
 	{
 		super( context, attrs, defStyle );
@@ -98,8 +79,6 @@ public class ClockView extends View
 		
 		alarmHandle = res.getDrawable( R.drawable.alarm );
 		timerHandle = res.getDrawable( R.drawable.timer );
-		
-		updateHandler.post( update );
 		
 		setClickable( true );
 	}
