@@ -47,6 +47,8 @@ public final class Chronometer extends Activity
 			
 			clockView.invalidate();
 			
+			updateTimerText();
+			
 			final long ms = System.currentTimeMillis();
 			
 			final long remainder = ms % 1000;
