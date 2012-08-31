@@ -1,6 +1,9 @@
 package com.metamage.chronometer;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -155,6 +158,9 @@ public final class Chronometer extends Activity
 		{
 			clockView.updateTimerHandle( timerTime );
 		}
+		
+		// Cancel the alarm, since we're already running
+		setSystemAlarm( 0 );
 	}
 	
 	@Override
@@ -163,6 +169,18 @@ public final class Chronometer extends Activity
 		super.onPause();
 		
 		savePrefs();
+		
+		long systemAlarmTime = alarmTime;
+		
+		if ( systemAlarmTime == 0  ||  timerTime != 0  &&  timerTime < systemAlarmTime )
+		{
+			systemAlarmTime = timerTime;
+		}
+		
+		if ( systemAlarmTime != 0 )
+		{
+			setSystemAlarm( systemAlarmTime );
+		}
 	}
 	
 	@Override
@@ -178,6 +196,24 @@ public final class Chronometer extends Activity
 		Vibrator vibrator = (Vibrator) getSystemService( VIBRATOR_SERVICE );
 		
 		vibrator.vibrate( ms );
+	}
+	
+	void setSystemAlarm( long ms )
+	{
+		AlarmManager alarmManager = (AlarmManager) getSystemService( ALARM_SERVICE );
+		
+		Intent intent = new Intent( this, Chronometer.class );
+		
+		PendingIntent pendingIntent = PendingIntent.getActivity( this, 0, intent, 0 );
+		
+		if ( ms != 0 )
+		{
+			alarmManager.set( AlarmManager.RTC_WAKEUP, ms, pendingIntent );
+		}
+		else
+		{
+			alarmManager.cancel( pendingIntent );
+		}
 	}
 	
 }
