@@ -9,6 +9,8 @@ import android.view.View;
 public final class Chronometer extends Activity
 {
 	
+	private boolean updating;
+	
 	private long alarmTime = 0;
 	private long timerTime = 0;
 	
@@ -20,6 +22,11 @@ public final class Chronometer extends Activity
 	{
 		public void run()
 		{
+			if ( !updating )
+			{
+				return;
+			}
+			
 			clockView.invalidate();
 			
 			final long ms = System.currentTimeMillis();
@@ -70,8 +77,24 @@ public final class Chronometer extends Activity
 		setContentView( R.layout.main );
 		
 		clockView = findViewById( R.id.clock );
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		
+		updating = true;
 		
 		updateHandler.post( update );
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		
+		updating = false;
 	}
 	
 }
