@@ -49,11 +49,15 @@ public final class Chronometer extends Activity
 			if ( alarmTime != 0  &&  ms >= alarmTime )
 			{
 				setAlarmTime( 0 );
+				
+				vibrate( 500 );
 			}
 			
 			if ( timerTime != 0  &&  ms >= timerTime )
 			{
 				setTimerTime( 0 );
+				
+				vibrate( 500 );
 			}
 		}
 	};
