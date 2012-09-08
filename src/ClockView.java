@@ -328,6 +328,8 @@ public class ClockView extends View
 			crossings += a < b ? 1 : -1;
 		}
 		
+		final boolean incremented = (int) angle != (int) lastDragAngle;
+		
 		lastDragAngle = angle;
 		
 		final long eventTime = eventTimeFromDrag();
@@ -348,6 +350,11 @@ public class ClockView extends View
 		}
 		
 		invalidate();
+		
+		if ( validDrag  &&  incremented )
+		{
+			chronometer.vibrate( 2 );
+		}
 	}
 	
 	private void endDrag()
