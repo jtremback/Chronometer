@@ -3,6 +3,7 @@ package com.metamage.chronometer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.view.View;
 
 
@@ -95,6 +96,13 @@ public final class Chronometer extends Activity
 		super.onStop();
 		
 		updating = false;
+	}
+	
+	public void vibrate( long ms )
+	{
+		Vibrator vibrator = (Vibrator) getSystemService( VIBRATOR_SERVICE );
+		
+		vibrator.vibrate( ms );
 	}
 	
 }
