@@ -203,8 +203,7 @@ public class ClockView extends View
 	
 	private boolean hitFeedback()
 	{
-		//final String vibrator_service = VIBRATOR_SERVICE;
-		final String vibrator_service = "vibrator";
+		final String vibrator_service = Context.VIBRATOR_SERVICE;
 
 		Vibrator vibrator = (Vibrator) getContext().getSystemService( vibrator_service );
 		
