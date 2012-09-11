@@ -13,6 +13,7 @@
 		
 		<activity
 			android:name="Chronometer"
+			android:launchMode="singleInstance"
 			android:screenOrientation="portrait"
 			>
 			<intent-filter>
