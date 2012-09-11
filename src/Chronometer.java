@@ -13,6 +13,8 @@ import android.os.Vibrator;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+
 
 public final class Chronometer extends Activity
 {
@@ -82,6 +84,20 @@ public final class Chronometer extends Activity
 	public void setAlarmTime( long ms )
 	{
 		alarmTime = ms;
+		
+		String text = "";
+		
+		if ( ms > 0 )
+		{
+			text = DateFormat.getTimeInstance( DateFormat.SHORT ).format( ms );
+			
+			if ( text.charAt( 1 ) == ':' )
+			{
+				text = "\u2007" + text;  // Prepend a figure space
+			}
+		}
+		
+		alarmText.setText( text );
 	}
 	
 	public void setTimerTime( long ms )
