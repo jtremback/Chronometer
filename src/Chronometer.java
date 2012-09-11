@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.view.View;
+import android.widget.TextView;
 
 
 public final class Chronometer extends Activity
@@ -25,6 +26,9 @@ public final class Chronometer extends Activity
 	
 	private long alarmTime = 0;
 	private long timerTime = 0;
+	
+	private TextView alarmText;
+	private TextView timerText;
 	
 	private ClockView clockView;
 	
@@ -130,6 +134,9 @@ public final class Chronometer extends Activity
 		setContentView( R.layout.main );
 		
 		clockView = (ClockView) findViewById( R.id.clock );
+		
+		alarmText = (TextView) findViewById( R.id.alarm );
+		timerText = (TextView) findViewById( R.id.timer );
 	}
 	
 	@Override
