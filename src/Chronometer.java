@@ -57,7 +57,7 @@ public final class Chronometer extends Activity
 			}
 		}
 	};
-
+	
 	long getAlarmTime()
 	{
 		return alarmTime;
