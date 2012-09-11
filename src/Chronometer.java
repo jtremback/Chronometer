@@ -136,6 +136,32 @@ public final class Chronometer extends Activity
 	}
 	
 	@Override
+	public void onResume()
+	{
+		super.onResume();
+		
+		loadPrefs();
+		
+		if ( alarmTime != 0 )
+		{
+			clockView.updateAlarmHandle( alarmTime );
+		}
+		
+		if ( timerTime != 0 )
+		{
+			clockView.updateTimerHandle( timerTime );
+		}
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		
+		savePrefs();
+	}
+	
+	@Override
 	public void onStop()
 	{
 		super.onStop();
