@@ -142,6 +142,41 @@ public class ClockView extends View
 		canvas.restore();
 	}
 	
+	public void updateAlarmHandle( long ms )
+	{
+		final Calendar cal = Calendar.getInstance();
+		
+		cal.setTimeInMillis( ms );
+		
+		final int hour   = cal.get( Calendar.HOUR   );
+		final int minute = cal.get( Calendar.MINUTE );
+		final int second = cal.get( Calendar.SECOND );
+		
+		final float seconds = second;
+		final float minutes = minute + seconds / 60;
+		final float hours   = hour   + minutes / 60;
+		
+		alarmAngle = hours * 30;  // 360 / 12
+		
+	}
+	
+	public void updateTimerHandle( long ms )
+	{
+		final Calendar cal = Calendar.getInstance();
+		
+		cal.setTimeInMillis( ms );
+		
+		final int hour   = cal.get( Calendar.HOUR   );
+		final int minute = cal.get( Calendar.MINUTE );
+		final int second = cal.get( Calendar.SECOND );
+		
+		final float seconds = second;
+		final float minutes = minute + seconds / 60;
+		
+		timerAngle = minutes * 6;  // 360 / 60
+		
+	}
+	
 	@Override
 	protected void onDraw( Canvas canvas )
 	{
