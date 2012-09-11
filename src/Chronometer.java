@@ -103,6 +103,19 @@ public final class Chronometer extends Activity
 	public void setTimerTime( long ms )
 	{
 		timerTime = ms;
+		
+		String text = "";
+		
+		if ( ms > 0 )
+		{
+			long delta = ms - System.currentTimeMillis();
+			
+			int minutes = (int) (delta / 1000 / 60);
+			
+			text = Integer.toString( minutes ) + " min";
+		}
+		
+		timerText.setText( text );
 	}
 	
 	static private void commitEdits( SharedPreferences.Editor editor )
