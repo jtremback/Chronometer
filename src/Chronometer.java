@@ -1,6 +1,9 @@
 package com.metamage.chronometer;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -9,6 +12,11 @@ import android.view.View;
 
 public final class Chronometer extends Activity
 {
+	
+	static final String CHRONOMETER_PREFS = "chronometer";
+	
+	static final String PREFS_ALARM = "alarm";
+	static final String PREFS_TIMER = "timer";
 	
 	private boolean updating;
 	
@@ -68,6 +76,43 @@ public final class Chronometer extends Activity
 	public void setTimerTime( long ms )
 	{
 		timerTime = ms;
+	}
+	
+	static private void commitEdits( SharedPreferences.Editor editor )
+	{
+		if ( VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD )
+		{
+			editor.apply();
+		}
+		else
+		{
+			editor.commit();
+		}
+	}
+	
+	private SharedPreferences getPrefs()
+	{
+		return getSharedPreferences( CHRONOMETER_PREFS, MODE_WORLD_READABLE );
+	}
+	
+	private void loadPrefs()
+	{
+		final SharedPreferences prefs = getPrefs();
+		
+		setAlarmTime( prefs.getLong( PREFS_ALARM, 0 ) );
+		setTimerTime( prefs.getLong( PREFS_TIMER, 0 ) );
+	}
+	
+	private void savePrefs()
+	{
+		final SharedPreferences prefs = getPrefs();
+		
+		final SharedPreferences.Editor editor = prefs.edit();
+		
+		editor.putLong( PREFS_ALARM, alarmTime );
+		editor.putLong( PREFS_TIMER, timerTime );
+		
+		commitEdits( editor );
 	}
 	
 	@Override
