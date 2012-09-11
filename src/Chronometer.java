@@ -15,7 +15,7 @@ public final class Chronometer extends Activity
 	private long alarmTime = 0;
 	private long timerTime = 0;
 	
-	private View clockView;
+	private ClockView clockView;
 	
 	private Handler updateHandler = new Handler();
 	
@@ -77,7 +77,7 @@ public final class Chronometer extends Activity
 		
 		setContentView( R.layout.main );
 		
-		clockView = findViewById( R.id.clock );
+		clockView = (ClockView) findViewById( R.id.clock );
 	}
 	
 	@Override
