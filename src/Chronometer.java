@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.view.View;
+import android.widget.TextView;
+
+import java.text.DateFormat;
 
 
 public final class Chronometer extends Activity
@@ -26,6 +29,9 @@ public final class Chronometer extends Activity
 	private long alarmTime = 0;
 	private long timerTime = 0;
 	
+	private TextView alarmText;
+	private TextView timerText;
+	
 	private ClockView clockView;
 	
 	private Handler updateHandler = new Handler();
@@ -40,6 +46,8 @@ public final class Chronometer extends Activity
 			}
 			
 			clockView.invalidate();
+			
+			updateTimerText();
 			
 			final long ms = System.currentTimeMillis();
 			
@@ -78,11 +86,50 @@ public final class Chronometer extends Activity
 	public void setAlarmTime( long ms )
 	{
 		alarmTime = ms;
+		
+		String text = "";
+		
+		if ( ms > 0 )
+		{
+			text = DateFormat.getTimeInstance( DateFormat.SHORT ).format( ms );
+			
+			if ( text.charAt( 1 ) == ':' )
+			{
+				text = "\u2007" + text;  // Prepend a figure space
+			}
+		}
+		
+		alarmText.setText( text );
 	}
 	
 	public void setTimerTime( long ms )
 	{
 		timerTime = ms;
+		
+		updateTimerText();
+	}
+	
+	private void updateTimerText()
+	{
+		String text = "";
+		
+		if ( timerTime > 0 )
+		{
+			long delta = timerTime - System.currentTimeMillis();
+			
+			final int minutes = (int) (delta / 1000 / 60);
+			
+			if ( minutes > 0 )
+			{
+				text = Integer.toString( minutes ) + " min";
+			}
+			else
+			{
+				text = Integer.toString( (int) (delta / 1000) ) + " sec";
+			}
+		}
+		
+		timerText.setText( text );
 	}
 	
 	static private void commitEdits( SharedPreferences.Editor editor )
@@ -130,6 +177,9 @@ public final class Chronometer extends Activity
 		setContentView( R.layout.main );
 		
 		clockView = (ClockView) findViewById( R.id.clock );
+		
+		alarmText = (TextView) findViewById( R.id.alarm );
+		timerText = (TextView) findViewById( R.id.timer );
 	}
 	
 	@Override

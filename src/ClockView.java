@@ -252,6 +252,22 @@ public class ClockView extends View
 		return dragging == ALARM_HANDLE ? msPerAlarmCircle : msPerTimerCircle;
 	}
 	
+	private long eventTimeFromDrag()
+	{
+		final double angleDragged = Trig.unsignedAngularDistance( baseDragAngle, lastDragAngle ) + crossings * 360;
+		
+		final double msDragged = angleDragged / 360 * msPerCircle();
+		
+		final long eventTime = timeOfDrag + (long) msDragged;
+		
+		if ( eventTime <= System.currentTimeMillis() )
+		{
+			return 0;
+		}
+		
+		return eventTime;
+	}
+	
 	private void beginDrag()
 	{
 		final double initialDragAngle = dragging == ALARM_HANDLE ? alarmAngle : timerAngle;
@@ -302,43 +318,30 @@ public class ClockView extends View
 			crossings += a < b ? 1 : -1;
 		}
 		
+		lastDragAngle = angle;
+		
+		final long eventTime = eventTimeFromDrag();
+		
 		final boolean validDrag = crossings >= 0;
 		
 		if ( dragging == ALARM_HANDLE )
 		{
 			alarmAngle = validDrag ? (float) angle : hourAngle;
+			
+			chronometer.setAlarmTime( eventTime );
 		}
 		else
 		{
 			timerAngle = validDrag ? (float) angle : minuteAngle;
+			
+			chronometer.setTimerTime( eventTime );
 		}
-		
-		lastDragAngle = angle;
 		
 		invalidate();
 	}
 	
 	private void endDrag()
 	{
-		final double angleDragged = Trig.unsignedAngularDistance( baseDragAngle, lastDragAngle ) + crossings * 360;
-		
-		final double msDragged = angleDragged / 360 * msPerCircle();
-		
-		long eventTime = timeOfDrag + (long) msDragged;
-		
-		if ( eventTime <= System.currentTimeMillis() )
-		{
-			eventTime = 0;
-		}
-		
-		if ( dragging == ALARM_HANDLE )
-		{
-			chronometer.setAlarmTime( eventTime );
-		}
-		else
-		{
-			chronometer.setTimerTime( eventTime );
-		}
 	}
 	
 	@Override
