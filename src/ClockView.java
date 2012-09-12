@@ -297,16 +297,24 @@ public class ClockView extends View
 	
 	private void updateDrag( double angle )
 	{
+		double quantum;
+		
 		if ( dragging == ALARM_HANDLE )
 		{
 			// round angle to nearest quarter hour
 			
-			final double quantum = 360.0 / (12 * 4);  // 7.5
-			
-			angle += quantum / 2;
-			
-			angle -= angle % quantum;
+			quantum = 360.0 / (12 * 4);  // 7.5
 		}
+		else
+		{
+			// round angle to nearest half minute
+			
+			quantum = 360.0 / (60 * 2);  // 3
+		}
+		
+		angle += quantum / 2;
+		
+		angle -= angle % quantum;
 		
 		final double a = Trig.signedAngularDistance( baseDragAngle, lastDragAngle );
 		final double b = Trig.signedAngularDistance( baseDragAngle, angle         );
