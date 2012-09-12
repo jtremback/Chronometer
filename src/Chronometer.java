@@ -94,6 +94,8 @@ public final class Chronometer extends Activity
 	
 	public void setAlarmTime( long ms )
 	{
+		ms -= ms % 1000;
+		
 		alarmTime = ms;
 		
 		String text = "";
@@ -113,6 +115,8 @@ public final class Chronometer extends Activity
 	
 	public void setTimerTime( long ms )
 	{
+		ms -= ms % 1000;
+		
 		timerTime = ms;
 		
 		updateTimerText();
