@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -226,6 +227,11 @@ public final class Chronometer extends Activity
 	public void onCreate( Bundle savedInstanceState )
 	{
 		super.onCreate( savedInstanceState );
+		
+		getWindow().addFlags( + WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+		                      | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+		                      | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+		                      | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
 		
 		setContentView( R.layout.main );
 		
