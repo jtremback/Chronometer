@@ -57,17 +57,24 @@ public final class Chronometer extends Activity
 			
 			updateHandler.postDelayed( this, gap );
 			
+			boolean shouldRing = false;
+			
 			if ( alarmTime != 0  &&  ms >= alarmTime )
 			{
 				setAlarmTime( 0 );
 				
-				vibrate( 500 );
+				shouldRing = true;
 			}
 			
 			if ( timerTime != 0  &&  ms >= timerTime )
 			{
 				setTimerTime( 0 );
 				
+				shouldRing = true;
+			}
+			
+			if ( shouldRing )
+			{
 				vibrate( 500 );
 			}
 		}
