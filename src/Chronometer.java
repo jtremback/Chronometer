@@ -139,7 +139,7 @@ public final class Chronometer extends Activity
 			
 			if ( seconds >= 60 )
 			{
-				final int minutes = seconds / 60;
+				final int minutes = (seconds + 30) / 60;
 				
 				text = Integer.toString( minutes ) + " min";
 			}
