@@ -133,17 +133,19 @@ public final class Chronometer extends Activity
 		
 		if ( timerTime > 0 )
 		{
-			long delta = timerTime - System.currentTimeMillis();
+			final long delta = timerTime - System.currentTimeMillis();
 			
-			final int minutes = (int) (delta / 1000 / 60);
+			final int seconds = (int) (delta / 1000);
 			
-			if ( minutes > 0 )
+			if ( seconds >= 60 )
 			{
+				final int minutes = seconds / 60;
+				
 				text = Integer.toString( minutes ) + " min";
 			}
 			else
 			{
-				text = Integer.toString( (int) (delta / 1000) ) + " sec";
+				text = Integer.toString( seconds ) + " sec";
 			}
 		}
 		
