@@ -297,20 +297,22 @@ public class ClockView extends View
 	
 	private void updateDrag( double angle )
 	{
-		double quantum;
+		int sections;
 		
 		if ( dragging == ALARM_HANDLE )
 		{
 			// round angle to nearest quarter hour
 			
-			quantum = 360.0 / (12 * 4);  // 7.5
+			sections = 12 * 4;  // 7.5 degrees each
 		}
 		else
 		{
 			// round angle to nearest half minute
 			
-			quantum = 360.0 / (60 * 2);  // 3
+			sections = 60 * 2;  // 3 degrees each
 		}
+		
+		final double quantum = 360.0 / sections;
 		
 		angle += quantum / 2;
 		
