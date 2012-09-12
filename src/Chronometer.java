@@ -145,7 +145,7 @@ public final class Chronometer extends Activity
 			}
 			else
 			{
-				text = Integer.toString( seconds ) + " sec";
+				text = Integer.toString( seconds + 1 ) + " sec";
 			}
 		}
 		
