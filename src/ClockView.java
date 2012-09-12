@@ -80,6 +80,11 @@ public class ClockView extends View
 		setClickable( true );
 	}
 	
+	public boolean isDragging()
+	{
+		return dragging != NOTHING;
+	}
+	
 	static void setBoundsOfHand( Drawable hand, float scale, Rect face )
 	{
 		final int handWidth  = Math.round( hand.getIntrinsicWidth () * scale );
