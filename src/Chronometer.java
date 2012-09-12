@@ -61,14 +61,18 @@ public final class Chronometer extends Activity
 			
 			if ( alarmTime != 0  &&  ms >= alarmTime )
 			{
-				setAlarmTime( 0 );
+				setAlarmTime( alarmTime + 15 * 60 * 1000 );
+				
+				clockView.updateAlarmHandle( alarmTime );
 				
 				shouldRing = true;
 			}
 			
 			if ( timerTime != 0  &&  ms >= timerTime )
 			{
-				setTimerTime( 0 );
+				setTimerTime( timerTime + 5 * 60 * 1000 );
+				
+				clockView.updateTimerHandle( timerTime );
 				
 				shouldRing = true;
 			}
