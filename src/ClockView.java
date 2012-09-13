@@ -39,16 +39,13 @@ public class ClockView extends View
 	private float alarmAngle;
 	private float timerAngle;
 	
+	private Orbit dragOrbit;
+	
 	private int dragging = NOTHING;
 	
 	private long timeOfDrag;
 	
 	private double existingDragDistance;
-	
-	private double baseDragAngle;
-	private double lastDragAngle;
-	
-	private int crossings;
 	
 	private final Chronometer chronometer = (Chronometer) getContext();
 	
@@ -256,7 +253,7 @@ public class ClockView extends View
 	
 	private double dragDistance()
 	{
-		return existingDragDistance + Trig.unsignedAngularDistance( baseDragAngle, lastDragAngle ) + crossings * 360;
+		return existingDragDistance + dragOrbit.distance();
 	}
 	
 	private long eventTimeFromDrag()
@@ -279,10 +276,6 @@ public class ClockView extends View
 	{
 		final double initialDragAngle = dragging == ALARM_HANDLE ? alarmAngle : timerAngle;
 		
-		baseDragAngle = initialDragAngle;
-		
-		crossings = 0;
-		
 		timeOfDrag = System.currentTimeMillis();
 		
 		final long eventTime = dragging == ALARM_HANDLE ? chronometer.getAlarmTime()
@@ -297,7 +290,7 @@ public class ClockView extends View
 			existingDragDistance = timeOffset / msPerCircle() * 360;
 		}
 		
-		lastDragAngle = initialDragAngle;
+		dragOrbit = new Orbit( initialDragAngle );
 	}
 	
 	private void updateDrag( double angle )
@@ -323,19 +316,9 @@ public class ClockView extends View
 		
 		angle -= angle % quantum;
 		
-		final double a = Trig.signedAngularDistance( baseDragAngle, lastDragAngle );
-		final double b = Trig.signedAngularDistance( baseDragAngle, angle         );
+		final double delta = dragOrbit.update( angle );
 		
-		final double c = Trig.signedAngularDistance( angle, lastDragAngle );
-		
-		if ( Math.abs( b ) < 90  &&  (a < 0) != (b < 0) )
-		{
-			crossings += a < b ? 1 : -1;
-		}
-		
-		final boolean incremented = (int) angle != (int) lastDragAngle;
-		
-		lastDragAngle = angle;
+		final boolean incremented = (int) delta != 0;
 		
 		final long eventTime = eventTimeFromDrag();
 		
