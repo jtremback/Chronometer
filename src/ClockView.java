@@ -199,12 +199,12 @@ public class ClockView extends View
 		
 		final float secondAngle = seconds *  6;  // 360 / 60
 		
-		if ( dragging != ALARM_HANDLE  &&  chronometer.getAlarmTime() == 0 )
+		if ( chronometer.getAlarmTime() == 0 )
 		{
 			alarmAngle = hourAngle;
 		}
 		
-		if ( dragging != TIMER_HANDLE  &&  chronometer.getTimerTime() == 0 )
+		if ( chronometer.getTimerTime() == 0 )
 		{
 			timerAngle = minuteAngle;
 		}
