@@ -43,6 +43,8 @@ public class ClockView extends View
 	
 	private long timeOfDrag;
 	
+	private double existingDragDistance;
+	
 	private double baseDragAngle;
 	private double lastDragAngle;
 	
@@ -252,9 +254,14 @@ public class ClockView extends View
 		return dragging == ALARM_HANDLE ? msPerAlarmCircle : msPerTimerCircle;
 	}
 	
+	private double dragDistance()
+	{
+		return existingDragDistance + Trig.unsignedAngularDistance( baseDragAngle, lastDragAngle ) + crossings * 360;
+	}
+	
 	private long eventTimeFromDrag()
 	{
-		final double angleDragged = Trig.unsignedAngularDistance( baseDragAngle, lastDragAngle ) + crossings * 360;
+		final double angleDragged = dragDistance();
 		
 		final double msDragged = angleDragged / 360 * msPerCircle();
 		
@@ -281,15 +288,13 @@ public class ClockView extends View
 		final long eventTime = dragging == ALARM_HANDLE ? chronometer.getAlarmTime()
 		                                                : chronometer.getTimerTime();
 		
+		existingDragDistance = 0;
+		
 		if ( eventTime != 0 )
 		{
 			final double timeOffset = eventTime - timeOfDrag;
 			
-			final double angleOffset = timeOffset / msPerCircle() * 360;
-			
-			crossings = (int) angleOffset / 360;
-			
-			baseDragAngle = (initialDragAngle - angleOffset + 360) % 360;
+			existingDragDistance = timeOffset / msPerCircle() * 360;
 		}
 		
 		lastDragAngle = initialDragAngle;
@@ -334,7 +339,7 @@ public class ClockView extends View
 		
 		final long eventTime = eventTimeFromDrag();
 		
-		final boolean validDrag = crossings >= 0;
+		final boolean validDrag = dragDistance() > 0;
 		
 		if ( dragging == ALARM_HANDLE )
 		{
