@@ -29,7 +29,7 @@
 		
 		<activity
 			android:name="Ring"
-			android:theme="@android:style/Theme.Translucent"
+			android:theme="@style/RingOverlay"
 			android:launchMode="singleInstance"
 			android:screenOrientation="portrait"
 			>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="RingOverlay" parent="android:Theme.Translucent">
+		<item name="android:windowBackground">@color/snooze_background</item>
+		<item name="android:colorBackground">@color/snooze_background</item>
+	</style>
+</resources>
