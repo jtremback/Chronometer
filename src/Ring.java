@@ -1,6 +1,9 @@
 package com.metamage.chronometer;
 
 import android.app.Activity;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.WindowManager;
@@ -8,6 +11,21 @@ import android.view.WindowManager;
 
 public final class Ring extends Activity
 {
+	
+	private Ringtone ringtone;
+	
+	private Ringtone startRinging()
+	{
+		vibrate( 500 );
+		
+		final Uri defaultAlarm = RingtoneManager.getDefaultUri( RingtoneManager.TYPE_ALARM );
+		
+		final Ringtone ringtone = RingtoneManager.getRingtone( this, defaultAlarm );
+		
+		ringtone.play();
+		
+		return ringtone;
+	}
 	
 	@Override
 	public void onCreate( Bundle savedInstanceState )
@@ -21,12 +39,14 @@ public final class Ring extends Activity
 		
 		setContentView( R.layout.snooze );
 		
-		vibrate( 500 );
+		ringtone = startRinging();
 	}
 	
 	@Override
 	protected void onDestroy()
 	{
+		ringtone.stop();
+		
 		super.onDestroy();
 		
 		overridePendingTransition( 0, 0 );
