@@ -19,9 +19,9 @@ public final class Ring extends Activity
 		                      | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
 		                      | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
 		
-		vibrate( 500 );
+		setContentView( R.layout.snooze );
 		
-		finish();
+		vibrate( 500 );
 	}
 	
 	@Override
