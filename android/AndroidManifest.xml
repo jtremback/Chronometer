@@ -27,5 +27,13 @@
 			</intent-filter>
 		</activity>
 		
+		<activity
+			android:name="Ring"
+			android:theme="@android:style/Theme.Translucent"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait"
+			>
+		</activity>
+		
 	</application>
 </manifest> 
