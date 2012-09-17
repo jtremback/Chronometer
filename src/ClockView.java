@@ -347,6 +347,7 @@ public class ClockView extends View
 	
 	private void endDrag()
 	{
+		chronometer.commit();
 	}
 	
 	@Override

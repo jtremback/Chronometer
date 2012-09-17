@@ -75,6 +75,8 @@ public final class Chronometer extends Activity
 			
 			if ( shouldRing )
 			{
+				savePrefs();
+				
 				vibrate( 500 );
 			}
 		}
@@ -114,6 +116,11 @@ public final class Chronometer extends Activity
 		timerTime = ms;
 		
 		updateTimerText();
+	}
+	
+	public void commit()
+	{
+		savePrefs();
 	}
 	
 	private void updateTimerText()
@@ -224,8 +231,6 @@ public final class Chronometer extends Activity
 	public void onPause()
 	{
 		super.onPause();
-		
-		savePrefs();
 		
 		long systemAlarmTime = alarmTime;
 		
