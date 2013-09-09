@@ -52,20 +52,15 @@ public class ClockView extends View
 	public ClockView( Context context, AttributeSet attrs, int defStyle )
 	{
 		super( context, attrs, defStyle );
-		
-		init( context );
 	}
 	
 	public ClockView( Context context, AttributeSet attrs )
 	{
 		super( context, attrs );
-		
-		init( context );
 	}
 	
-	private void init( Context context )
 	{
-		final Resources res = context.getResources();
+		final Resources res = getContext().getResources();
 		
 		clockFace   = res.getDrawable( R.drawable.face   );
 		clockCenter = res.getDrawable( R.drawable.center );
