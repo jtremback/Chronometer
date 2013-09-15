@@ -128,6 +128,8 @@ public class ClockView extends View
 		setBoundsOfHand( timerHandle, scale, faceBounds );
 		
 		setBoundsOfHand( clockCenter, scale, faceBounds );
+		
+		scale *= getResources().getDisplayMetrics().density;
 	}
 	
 	private void drawHand( Canvas canvas, Drawable hand, float degrees )
