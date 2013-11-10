@@ -141,7 +141,20 @@ public final class Chronometer extends Activity
 			{
 				final int minutes = (seconds + 30) / 60;
 				
-				text = Integer.toString( minutes ) + " min";
+				if ( minutes >= 60 )
+				{
+					final int hours = minutes / 60;
+					
+					final int min = minutes % 60;
+					
+					final String space = min >= 10 ? "" : "\u2007";  // Pad with figure space
+					
+					text = Integer.toString( hours ) + " h " + space + Integer.toString( min ) + " m";
+				}
+				else
+				{
+					text = Integer.toString( minutes ) + " min";
+				}
 			}
 			else
 			{
