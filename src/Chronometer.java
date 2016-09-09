@@ -77,7 +77,9 @@ public final class Chronometer extends Activity
 			{
 				savePrefs();
 				
-				vibrate( 500 );
+				Chronometer.this.startActivity( new Intent( Chronometer.this, Ring.class ) );
+				
+				overridePendingTransition( 0, 0 );
 			}
 		}
 	};

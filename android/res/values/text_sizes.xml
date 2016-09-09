@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<dimen name="alarm_timer_value">36dp</dimen>
+	<dimen name="tap_to_snooze">72dp</dimen>
 </resources>

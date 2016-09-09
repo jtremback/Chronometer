@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Chronometer (beta)</string>
+	<string name="tap_to_snooze">Tap to snooze</string>
 </resources>
